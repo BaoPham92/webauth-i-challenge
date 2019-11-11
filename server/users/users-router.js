@@ -1,7 +1,14 @@
 const router = require('express').Router();
+const Users = require('./user-model');
+const Auth = require('../auth/authorization');
 
-router.get('/', (req, res) => {
-    return res.send(`<h1>Welcome to Users endpoint</h1>`)
+router.get('/', Auth, (req, res) => {
+    Users.getAll()
+    .then(userList => res.status(200).json(userList))
+    .catch(err => res.status(500).json({ 
+        message: 'Could not get list of users from database.',
+        errorMessage: err
+     }))
 })
 
 module.exports = router;
